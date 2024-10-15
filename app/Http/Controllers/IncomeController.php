@@ -11,6 +11,8 @@ class IncomeController extends Controller
         $request->validate([
             'description' => 'required',
             'amout' => 'required|numeric',
+            'bank_id' => 'required|exists:banks,id',
+            'company' => 'required|string'
         ]);
 
         Income::create($request->all());
