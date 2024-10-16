@@ -54,7 +54,7 @@
             max-height: 300px;
         }
 
-        .bank-card {
+        .bank-card, .work-card {
             background-color: #ffffff;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
@@ -66,7 +66,7 @@
             text-align: left;
         }
 
-        .bank-title {
+        .bank-title, .work-title {
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -84,26 +84,26 @@
         }
 
         .income {
-            color: #21a179; /* Verde */
+            color: #21a179; /* Green */
         }
 
         .expense {
-            color: #b91c1c; /* Rojo */
+            color: #b91c1c; /* Red */
         }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1 class="text-3xl font-bold mb-6">Welcome!</h1>
-        <a href="{{ route('register-login') }}" class="btn">Sign in / Sign up</a>
+        <!-- TODO: TITULO -->
+        <a href="{{ route('register-login') }}" class="btn fixed top-2 right-2">Sign In / Sign Up</a>
 
-        <!-- Contenedores para los gráficos -->
+        <!-- Containers for the charts -->
         <div class="chart-container">
             <canvas id="pieChart"></canvas>
             <canvas id="barChart"></canvas>
         </div>
 
-        <!-- Cuadrados para entidades financieras -->
+        <!-- Cards for financial entities -->
         <div class="chart-container">
             <div class="bank-card">
                 <div class="bank-title">Banco Macro</div>
@@ -122,10 +122,34 @@
                 <ul class="transaction-list" id="lemon-transactions"></ul>
             </div>
         </div>
+
+        <!-- Cards for work details -->
+        <div class="chart-container">
+            <div class="work-card">
+                <div class="work-title">Rodine SRL</div>
+                <p>Hours Worked: 3</p>
+                <p>Monthly Earnings: $310,000</p>
+            </div>
+            <div class="work-card">
+                <div class="work-title">Tech Solutions</div>
+                <p>Hours Worked: 5</p>
+                <p>Monthly Earnings: $150,000</p>
+            </div>
+            <div class="work-card">
+                <div class="work-title">Global Corp</div>
+                <p>Hours Worked: 4</p>
+                <p>Monthly Earnings: $200,000</p>
+            </div>
+            <div class="work-card">
+                <div class="work-title">Greenfield Ltd.</div>
+                <p>Hours Worked: 6</p>
+                <p>Monthly Earnings: $400,000</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Generar ingresos y egresos aleatorios
+        // Generate random incomes and expenses
         function generateRandomTransactions() {
             let transactions = [];
             for (let i = 0; i < 5; i++) {
@@ -148,7 +172,7 @@
             });
         }
 
-        // Llenar cada tarjeta con datos aleatorios
+        // Fill each card with random data
         const macroTransactions = generateRandomTransactions();
         const ualaTransactions = generateRandomTransactions();
         const mpTransactions = generateRandomTransactions();
@@ -159,9 +183,9 @@
         displayTransactions('mp-transactions', mpTransactions);
         displayTransactions('lemon-transactions', lemonTransactions);
 
-        // Datos de muestra para el gráfico de torta
+        // Sample data for the pie chart
         const pieData = {
-            labels: ['Incomes', 'Pérdidas'],
+            labels: ['Incomes', 'Expenses'],
             datasets: [{
                 data: [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
                 backgroundColor: ['rgb(21 128 61)', 'rgb(185 28 28)'],
@@ -169,7 +193,7 @@
             }]
         };
 
-        // Crear el gráfico de torta
+        // Create the pie chart
         const pieChart = new Chart(document.getElementById('pieChart'), {
             type: 'pie',
             data: pieData,
@@ -181,23 +205,23 @@
                     },
                     title: {
                         display: true,
-                        text: 'Distribución de Ganancias y Expenses'
+                        text: 'Distribution of Incomes and Expenses'
                     }
                 }
             }
         });
 
-        // Datos de muestra para el gráfico de barras
+        // Sample data for the bar chart
         const barData = {
-            labels: ['Incomes', 'Pérdidas'],
+            labels: ['Incomes', 'Expenses'],
             datasets: [{
-                label: 'Monto',
+                label: 'Amount',
                 data: [Math.floor(Math.random() * 5000), Math.floor(Math.random() * 5000)],
                 backgroundColor: ['rgb(21 128 61)', 'rgb(185 28 28)'],
             }]
         };
 
-        // Crear el gráfico de barras
+        // Create the bar chart
         const barChart = new Chart(document.getElementById('barChart'), {
             type: 'bar',
             data: barData,

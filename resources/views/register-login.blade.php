@@ -71,6 +71,17 @@
         <!-- Carousel Container -->
         <div class="w-full max-w-sm p-6">
             <div id="loginForm" class="card p-8 show">
+                <!-- Mostrar errores si existen -->
+                @if ($errors->any())
+                    <div class="mb-4">
+                        <ul class="text-red-500">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Bienvenido de nuevo</h2>
                 <form action="{{ route('login') }}" method="POST">
                     @csrf

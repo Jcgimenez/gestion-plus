@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -28,7 +29,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main style="background: linear-gradient(to right, #e0f7fa, #f1f8e9);">
                 {{ $slot }}
             </main>
         </div>

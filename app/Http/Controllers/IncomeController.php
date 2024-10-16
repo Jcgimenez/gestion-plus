@@ -42,4 +42,17 @@ class IncomeController extends Controller
 
         return response()->json(['message' => 'Income updated succesfully']);
     }
+
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = $value;
+        $this->attributes['amount_pesos'] = $value;
+        $this->attributes['amount_dollars'] = $value / $this->getCurrentDollarRate();
+    }
+    
+    private function getCurrentDollarRate()
+    {
+        return 1150; 
+    }
+    
 }

@@ -46,8 +46,11 @@ class RegisteredUserController extends Controller
             event(new Registered($user));
 
             Auth::login($user);
-
-            return redirect(route('dashboard', absolute: false));
+            
+            $userId = Auth::user()->id;
+            $user = User::find($userId);
+        
+            return redirect()->route('dashboard')->with('user', $user->toJson());
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         }
