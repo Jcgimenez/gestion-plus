@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->decimal('amount', 8, 2);
+            $table->decimal('amount', 10, 2);
+            $table->foreignId('bank_id')->constrained('banks')->onDelete('cascade');
+            $table->string('location');
             $table->timestamps();
-        });        
+        });
     }
 
     /**
