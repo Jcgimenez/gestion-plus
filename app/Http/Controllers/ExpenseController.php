@@ -31,7 +31,15 @@ class ExpenseController extends Controller
     {
         $request->validate([
             'description' => 'required',
-            'mamount'
+            'amount' => 'required|numeric',
+            'bank_id' => 'required|exists:banks,id',
+            'location' => 'required|string',
         ]);
+
+        $expense = Expense::findOrFail($id);
+
+        $expense->update($request->all());
+
+        return response()->json(['message' => 'Expense updated succesfully']);
     }
 }
