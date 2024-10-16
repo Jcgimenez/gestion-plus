@@ -14,11 +14,17 @@ class Expense extends Model
         'amount',
         'bank_id',
         'location',
+        'user_id',
     ];
 
     public function bank()
     {
         return $this->belongsTo(Bank::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }

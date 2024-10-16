@@ -14,10 +14,17 @@ class Income extends Model
         'amount',
         'bank_id',
         'company',
+        'user_id',
     ];
 
     public function bank()
     {
         return $this->belongsTo(Bank::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    
 }

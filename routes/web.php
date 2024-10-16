@@ -1,13 +1,24 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/incomes/{id}/edit', [IncomeController::class, 'edit']);
-Route::put('/incomes/{id}', [IncomeController::class, 'update']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/expenses/{id}/edit', [ExpenseController::class, 'edit']);
-Route::put('/expenses/{id}', [ExpenseController::class, 'update']);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/register-login', function () {
+    return view('register-login');
+})->name('register-login');
+
+require __DIR__.'/auth.php';
