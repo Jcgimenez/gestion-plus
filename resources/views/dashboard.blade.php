@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,8 +94,17 @@
 </head>
 <body>
     <div class="card">
-        <!-- TODO: TITULO -->
-        <a href="{{ route('register-login') }}" class="btn fixed top-2 right-2">Sign In / Sign Up</a>
+        <a href="{{ route('register-login') }}" class="btn fixed top-2 right-2">Sign out</a>
+
+        @php
+            $totalIncomes = 0;
+            $totalExpenses = 0;
+            
+            foreach($user->banks as $bank) {
+                $totalIncomes += $bank->income->sum('amount');
+                $totalExpenses += $bank->expense->sum('amount');
+            }
+        @endphp
 
         <!-- Containers for the charts -->
         <div class="chart-container">
@@ -110,8 +116,28 @@
         <div class="chart-container">
             @foreach($user->banks as $bank)
                 <div class="bank-card">
-                    <div class="bank-title">{{$bank->name}}</div>
-                    <ul class="transaction-list" id="{{$bank->cod_name}}-transactions"></ul>
+                    <div class="bank-title">{{ $bank->name }}</div>
+                    <ul class="transaction-list" id="bank-{{ $bank->id }}-transactions">
+                        @if($bank->income->isNotEmpty())
+                            @foreach($bank->income as $income)
+                                <li class="transaction-item income">
+                                    <span>Income</span><span>${{ $income->amount }}</span>
+                                </li>
+                            @endforeach
+                        @else
+                            <li>No incomes found for this bank.</li>
+                        @endif
+
+                        @if($bank->expense->isNotEmpty())
+                            @foreach($bank->expense as $expense)
+                                <li class="transaction-item expense">
+                                    <span>Expense</span><span>${{ $expense->amount }}</span>
+                                </li>
+                            @endforeach
+                        @else
+                            <li>No expenses found for this bank.</li>
+                        @endif
+                    </ul>
                 </div>
             @endforeach
         </div>
@@ -119,12 +145,10 @@
         <!-- Cards for work details -->
         <div class="chart-container">
             @php
-                // Inicializamos las variables para sumar el total de horas y ganancias
                 $totalHours = 0;
                 $totalEarnings = 0;
             @endphp
-            
-            <!-- Iteramos sobre cada empresa -->
+
             @foreach($user->companies as $company)
                 <div class="work-card">
                     <div class="work-title">{{$company->name}}</div>
@@ -132,15 +156,14 @@
                     <p>Monthly Earnings: ${{ number_format($company->monthly_earnings, 2) }}</p>
                 </div>
             
-                <!-- Acumulamos las horas trabajadas y ganancias -->
                 @php
                     $totalHours += $company->hours_worked;
                     $totalEarnings += $company->monthly_earnings;
                 @endphp
             @endforeach
         </div>
-            
-        <!-- Mostramos una tarjeta con los totales -->
+
+        <!-- Totals card -->
         <div class="chart-container">
             <div class="work-card" style="background-color: #f0f4f8;">
                 <div class="work-title">Total</div>
@@ -148,51 +171,13 @@
                 <p>Total Monthly Earnings: ${{ number_format($totalEarnings, 2) }}</p>
             </div>
         </div>
-
     </div>
 
     <script>
-        // Generate random incomes and expenses
-        function generateRandomTransactions() {
-            let transactions = [];
-            for (let i = 0; i < 5; i++) {
-                const income = (Math.random() * 1000).toFixed(2);
-                const expense = (Math.random() * 1000).toFixed(2);
-                transactions.push({ type: 'income', amount: income });
-                transactions.push({ type: 'expense', amount: expense });
-            }
-            return transactions;
-        }
-
-        function displayTransactions(containerId, transactions) {
-            const container = document.getElementById(containerId);
-            transactions.forEach(transaction => {
-                const li = document.createElement('li');
-                li.classList.add('transaction-item');
-                li.classList.add(transaction.type === 'income' ? 'income' : 'expense');
-                li.innerHTML = `<span>${transaction.type === 'income' ? 'Income' : 'Expense'}</span><span>$${transaction.amount}</span>`;
-                container.appendChild(li);
-            });
-        }
-
-        // Fill each card with random data
-        const macroTransactions = generateRandomTransactions();
-        const ualaTransactions = generateRandomTransactions();
-        const mpTransactions = generateRandomTransactions();
-        const lemonTransactions = generateRandomTransactions();
-        const binanceTransactions = generateRandomTransactions();
-
-        displayTransactions('macro-transactions', macroTransactions);
-        displayTransactions('uala-transactions', ualaTransactions);
-        displayTransactions('mp-transactions', mpTransactions);
-        displayTransactions('lemon-transactions', lemonTransactions);
-        displayTransactions('binance-transactions', binanceTransactions);
-
-        // Sample data for the pie chart
         const pieData = {
             labels: ['Incomes', 'Expenses'],
             datasets: [{
-                data: [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                data: [{{ $totalIncomes }}, {{ $totalExpenses }}],
                 backgroundColor: ['rgb(21 128 61)', 'rgb(185 28 28)'],
                 hoverOffset: 4
             }]
@@ -216,12 +201,12 @@
             }
         });
 
-        // Sample data for the bar chart
+        // Data for the bar chart with real totals from the backend
         const barData = {
             labels: ['Incomes', 'Expenses'],
             datasets: [{
                 label: 'Amount',
-                data: [Math.floor(Math.random() * 5000), Math.floor(Math.random() * 5000)],
+                data: [{{ $totalIncomes }}, {{ $totalExpenses }}],
                 backgroundColor: ['rgb(21 128 61)', 'rgb(185 28 28)'],
             }]
         };

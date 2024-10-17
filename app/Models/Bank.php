@@ -12,6 +12,7 @@ class Bank extends Model
     protected $fillable = [
         'name',
         'user_id',
+        'banks_id',
     ];
 
     public function income()

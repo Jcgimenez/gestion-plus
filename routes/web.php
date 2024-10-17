@@ -21,4 +21,7 @@ Route::get('/register-login', function () {
     return view('register-login');
 })->name('register-login');
 
+Route::resource('banks', BankController::class);
+Route::resource('companies', CompanyController::class);
+
 require __DIR__.'/auth.php';
