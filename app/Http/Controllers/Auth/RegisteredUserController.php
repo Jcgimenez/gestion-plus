@@ -48,7 +48,7 @@ class RegisteredUserController extends Controller
             Auth::login($user);
             
             $userId = Auth::user()->id;
-            $user = User::find($userId);
+            $user = User::with(['companies', 'income', 'expense', 'banks'])->find(Auth::id());
         
             return redirect()->route('dashboard')->with('user', $user->toJson());
         } catch (ValidationException $e) {

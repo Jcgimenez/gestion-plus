@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('dashboard', function ($view) {
-            $user = User::with(['companies', 'income', 'expense'])->find(Auth::id());
+            $user = User::with(['companies', 'income', 'expense', 'banks'])->find(Auth::id());
             $view->with('user', $user);
         });
     }

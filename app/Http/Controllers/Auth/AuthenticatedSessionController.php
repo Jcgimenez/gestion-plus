@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
     
         $userId = Auth::user()->id;
-        $user = User::with(['companies', 'income', 'expense'])->find($userId);
+        $user = User::with(['companies', 'income', 'expense', 'banks'])->find(Auth::id());
     
         return redirect()->route('dashboard')->with('user', $user->toJson());
     }    
