@@ -94,7 +94,8 @@
 </head>
 <body>
     <div class="card">
-        <a href="{{ route('register-login') }}" class="btn fixed top-2 right-2">Sign out</a>
+        <span class="text-3xl font-bold">Welcome {{$user->name}}</span>
+        @include('layouts.navigation')
 
         @php
             $totalIncomes = 0;
