@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bank;
+use App\Models\User;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BankController extends Controller
 {
     public function index()
     {
         $banks = Bank::all();
-        return view('banks.index', compact('banks'));
+        $userId = Auth::user()->id;
+        $user = User::find($userId);
+        return view('banks.index', compact('banks', 'user'));
     }
 
     public function create()
@@ -24,12 +29,13 @@ class BankController extends Controller
         $bankInfo = BankInfo::create([
             'name' => $request->name,
         ]);
+
+        $user = Auth::user();
     
         Bank::create([
             'name' => $request->name,
             'bank_id' => $bankInfo->id, 
-            'user_id' => $request->user_id,
-            'cod-name' => $request->cod_name,
+            'user_id' => $user->id,
         ]);
 
         return redirect()->route('banks.index')->with('success', 'Bank created successfully.');
@@ -49,8 +55,6 @@ class BankController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'user_id' => 'required',
-            'cod_name' => 'required',
         ]);
 
         $bank->update($request->all());

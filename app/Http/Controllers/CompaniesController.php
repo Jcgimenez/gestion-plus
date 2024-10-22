@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Companies;
-use Illuminate\Http\Request;
+use App\Models\User;
 
-class CompanyController extends Controller
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class CompaniesController extends Controller
 {
     public function index()
     {
         $companies = Companies::all();
-        return view('companies.index', compact('companies'));
+        $userId = Auth::user()->id;
+        $user = User::find($userId);
+        return view('companies.index', compact('companies', 'user'));
     }
 
     public function create()

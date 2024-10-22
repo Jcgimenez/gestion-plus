@@ -19,16 +19,16 @@
     </div>
     <!-- Bank Edit  -->
     <div>
-        <a href="{{ route('register-login') }}" class="btn flex justify-center space-x-2 bg-green-500 text-white hover:bg-green-600">
+        <a href="{{ route('banks.index') }}" class="btn flex justify-center space-x-2 bg-green-500 text-white hover:bg-green-600">
             <span>Banks</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 stroke-current text-white">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
             </svg>
         </a>
-    </div
+    </div>
     <!-- Companies Edit -->
     <div>
-        <a href="{{ route('register-login') }}" class="btn flex justify-center space-x-2 bg-red-500 text-white hover:bg-red-600">
+        <a href="{{ route('companies.index') }}" class="btn flex justify-center space-x-2 bg-red-500 text-white hover:bg-red-600">
             <span>Companies</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 stroke-current text-white">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />

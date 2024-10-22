@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BankController;
+use App\Http\Controllers\CompaniesController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,6 +24,6 @@ Route::get('/register-login', function () {
 })->name('register-login');
 
 Route::resource('banks', BankController::class);
-Route::resource('companies', CompanyController::class);
+Route::resource('companies', CompaniesController::class);
 
 require __DIR__.'/auth.php';

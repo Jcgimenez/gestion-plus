@@ -1,239 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to right, #e0f7fa, #f1f8e9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            flex-direction: column;
-        }
+<x-app-layout>
+    <body>
+        <div class="card">
+            <span class="text-3xl font-bold">Welcome {{$user->name}}</span>
 
-        .card {
-            background-color: white;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            width: 90%;
-            max-width: 1200px;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            background-color: #38bdf8;
-            color: white;
-            font-weight: 600;
-            border-radius: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: #0284c7;
-        }
-
-        .chart-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        canvas {
-            max-width: 300px;
-            max-height: 300px;
-        }
-
-        .bank-card, .work-card {
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            width: 22%;
-            min-width: 200px;
-            margin: 10px;
-            text-align: left;
-        }
-
-        .bank-title, .work-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .transaction-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-        }
-
-        .income {
-            color: #21a179; /* Green */
-        }
-
-        .expense {
-            color: #b91c1c; /* Red */
-        }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <span class="text-3xl font-bold">Welcome {{$user->name}}</span>
-        @include('layouts.navigation')
-
-        @php
-            $totalIncomes = 0;
-            $totalExpenses = 0;
-            
-            foreach($user->banks as $bank) {
-                $totalIncomes += $bank->income->sum('amount');
-                $totalExpenses += $bank->expense->sum('amount');
-            }
-        @endphp
-
-        <!-- Containers for the charts -->
-        <div class="chart-container">
-            <canvas id="pieChart"></canvas>
-            <canvas id="barChart"></canvas>
-        </div>
-
-        <!-- Cards for financial entities -->
-        <div class="chart-container">
-            @foreach($user->banks as $bank)
-                <div class="bank-card">
-                    <div class="bank-title">{{ $bank->name }}</div>
-                    <ul class="transaction-list" id="bank-{{ $bank->id }}-transactions">
-                        @if($bank->income->isNotEmpty())
-                            @foreach($bank->income as $income)
-                                <li class="transaction-item income">
-                                    <span>Income</span><span>${{ $income->amount }}</span>
-                                </li>
-                            @endforeach
-                        @else
-                            <li>No incomes found for this bank.</li>
-                        @endif
-
-                        @if($bank->expense->isNotEmpty())
-                            @foreach($bank->expense as $expense)
-                                <li class="transaction-item expense">
-                                    <span>Expense</span><span>${{ $expense->amount }}</span>
-                                </li>
-                            @endforeach
-                        @else
-                            <li>No expenses found for this bank.</li>
-                        @endif
-                    </ul>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Cards for work details -->
-        <div class="chart-container">
             @php
-                $totalHours = 0;
-                $totalEarnings = 0;
+                $totalIncomes = 0;
+                $totalExpenses = 0;
+
+                foreach($user->banks as $bank) {
+                    $totalIncomes += $bank->income->sum('amount');
+                    $totalExpenses += $bank->expense->sum('amount');
+                }
             @endphp
 
-            @foreach($user->companies as $company)
-                <div class="work-card">
-                    <div class="work-title">{{$company->name}}</div>
-                    <p>Hours Worked: {{$company->hours_worked}}</p>
-                    <p>Monthly Earnings: ${{ number_format($company->monthly_earnings, 2) }}</p>
-                </div>
-            
-                @php
-                    $totalHours += $company->hours_worked;
-                    $totalEarnings += $company->monthly_earnings;
-                @endphp
-            @endforeach
-        </div>
+            <!-- Containers for the charts -->
+            <div class="chart-container">
+                <canvas id="pieChart"></canvas>
+                <canvas id="barChart"></canvas>
+            </div>
 
-        <!-- Totals card -->
-        <div class="chart-container">
-            <div class="work-card" style="background-color: #f0f4f8;">
-                <div class="work-title">Total</div>
-                <p>Total Hours Worked: {{$totalHours}}</p>
-                <p>Total Monthly Earnings: ${{ number_format($totalEarnings, 2) }}</p>
+            <!-- Cards for financial entities -->
+            <div class="chart-container">
+                @foreach($user->banks as $bank)
+                    <div class="bank-card">
+                        <div class="bank-title">{{ $bank->name }}</div>
+                        <ul class="transaction-list" id="bank-{{ $bank->id }}-transactions">
+                            @if($bank->income->isNotEmpty())
+                                @foreach($bank->income as $income)
+                                    <li class="transaction-item income">
+                                        <span>Income</span><span>${{ $income->amount }}</span>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li>No incomes found for this bank.</li>
+                            @endif
+
+                            @if($bank->expense->isNotEmpty())
+                                @foreach($bank->expense as $expense)
+                                    <li class="transaction-item expense">
+                                        <span>Expense</span><span>${{ $expense->amount }}</span>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li>No expenses found for this bank.</li>
+                            @endif
+                        </ul>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Cards for work details -->
+            <div class="chart-container">
+                @php
+                    $totalHours = 0;
+                    $totalEarnings = 0;
+                @endphp
+
+                @foreach($user->companies as $company)
+                    <div class="work-card">
+                        <div class="work-title">{{$company->name}}</div>
+                        <p>Hours Worked: {{$company->hours_worked}}</p>
+                        <p>Monthly Earnings: ${{ number_format($company->monthly_earnings, 2) }}</p>
+                    </div>
+
+                    @php
+                        $totalHours += $company->hours_worked;
+                        $totalEarnings += $company->monthly_earnings;
+                    @endphp
+                @endforeach
+            </div>
+
+            <!-- Totals card -->
+            <div class="chart-container">
+                <div class="work-card" style="background-color: #f0f4f8;">
+                    <div class="work-title">Total</div>
+                    <p>Total Hours Worked: {{$totalHours}}</p>
+                    <p>Total Monthly Earnings: ${{ number_format($totalEarnings, 2) }}</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        const pieData = {
-            labels: ['Incomes', 'Expenses'],
-            datasets: [{
-                data: [{{ $totalIncomes }}, {{ $totalExpenses }}],
-                backgroundColor: ['rgb(21 128 61)', 'rgb(185 28 28)'],
-                hoverOffset: 4
-            }]
-        };
+        <script>
+            const pieData = {
+                labels: ['Incomes', 'Expenses'],
+                datasets: [{
+                    data: [{{ $totalIncomes }}, {{ $totalExpenses }}],
+                    backgroundColor: ['rgb(21 128 61)', 'rgb(185 28 28)'],
+                    hoverOffset: 4
+                }]
+            };
 
-        // Create the pie chart
-        const pieChart = new Chart(document.getElementById('pieChart'), {
-            type: 'pie',
-            data: pieData,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Distribution of Incomes and Expenses'
+            // Create the pie chart
+            const pieChart = new Chart(document.getElementById('pieChart'), {
+                type: 'pie',
+                data: pieData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribution of Incomes and Expenses'
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        // Data for the bar chart with real totals from the backend
-        const barData = {
-            labels: ['Incomes', 'Expenses'],
-            datasets: [{
-                label: 'Amount',
-                data: [{{ $totalIncomes }}, {{ $totalExpenses }}],
-                backgroundColor: ['rgb(21 128 61)', 'rgb(185 28 28)'],
-            }]
-        };
+            // Data for the bar chart with real totals from the backend
+            const barData = {
+                labels: ['Incomes', 'Expenses'],
+                datasets: [{
+                    label: 'Amount',
+                    data: [{{ $totalIncomes }}, {{ $totalExpenses }}],
+                    backgroundColor: ['rgb(21 128 61)', 'rgb(185 28 28)'],
+                }]
+            };
 
-        // Create the bar chart
-        const barChart = new Chart(document.getElementById('barChart'), {
-            type: 'bar',
-            data: barData,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
+            // Create the bar chart
+            const barChart = new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: barData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Incomes vs Expenses'
+                        }
                     },
-                    title: {
-                        display: true,
-                        text: 'Incomes vs Expenses'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
-    </script>
-</body>
-</html>
+            });
+        </script>
+    </body>
+</x-app-layout>
