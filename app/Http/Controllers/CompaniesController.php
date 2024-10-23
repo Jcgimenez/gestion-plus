@@ -50,20 +50,23 @@ class CompaniesController extends Controller
         return view('companies.edit', compact('companies'));
     }
 
-    public function update(Request $request, Companies $companies)
+    public function update(Request $request, Companies $company)
     {
         $request->validate([
             'name' => 'required',
-            'companies_id' => 'required',
-            'user_id' => 'required',
-            'monthly_earnings' => 'required',
-            'hours_worked' => 'required',
+            'monthly_earnings' => 'required|numeric',
+            'hours_worked' => 'required|numeric',
         ]);
-
-        $companies->update($request->all());
-
-        return redirect()->route('companies.index')->with('success', 'Companies updated successfully.');
-    }
+    
+        // Actualizar los campos
+        $company->update([
+            'name' => $request->input('name'),
+            'monthly_earnings' => $request->input('monthly_earnings'),
+            'hours_worked' => $request->input('hours_worked'),
+        ]);
+    
+        return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
+    }    
 
     public function destroy(Companies $companies)
     {
